@@ -3,160 +3,216 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Rocket Booster — Otimizar</title>
+<title>Rocket Booster — otimização, bom desempenho</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
 <style>
-:root{--bg:#0A0E1F;--bg-soft:#0F1430;--ink:#EAF0FF;--ink-dim:#93A0C4;--blue:#1E90FF;--purple:#8A2BE2;--ok:#34D399;--line:rgba(234,240,255,.10);--card:rgba(255,255,255,.03);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
-:root[data-theme="light"]{--bg:#F5F7FD;--bg-soft:#FFF;--ink:#0A0E1F;--ink-dim:#4A5578;--ok:#059669;--line:rgba(10,14,31,.10);--card:rgba(10,14,31,.03);color-scheme:light}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#F5F7FD;--bg-soft:#FFF;--ink:#0A0E1F;--ink-dim:#4A5578;--ok:#059669;--line:rgba(10,14,31,.10);--card:rgba(10,14,31,.03);color-scheme:light}}
+:root{--bg:#0A0E1F;--bg-soft:#0F1430;--ink:#EAF0FF;--ink-dim:#93A0C4;--blue:#1E90FF;--purple:#8A2BE2;--line:rgba(234,240,255,.10);--card:rgba(255,255,255,.03);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+:root[data-theme="light"]{--bg:#F5F7FD;--bg-soft:#FFF;--ink:#0A0E1F;--ink-dim:#4A5578;--line:rgba(10,14,31,.10);--card:rgba(10,14,31,.03);color-scheme:light}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#F5F7FD;--bg-soft:#FFF;--ink:#0A0E1F;--ink-dim:#4A5578;--line:rgba(10,14,31,.10);--card:rgba(10,14,31,.03);color-scheme:light}}
+html{scroll-padding-top:calc(80px + env(safe-area-inset-top,0px));scroll-behavior:smooth}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;position:relative}
-h1,h2,h3,.brand,.num{font-family:'Space Grotesk','Inter',system-ui,sans-serif}
-.glow{position:fixed;top:-200px;right:-160px;width:600px;height:600px;background:radial-gradient(circle,color-mix(in srgb,var(--purple) 32%,transparent),transparent 70%);pointer-events:none}
-.glow.b{top:auto;bottom:-260px;right:auto;left:-200px;background:radial-gradient(circle,color-mix(in srgb,var(--blue) 22%,transparent),transparent 70%)}
-.app{position:relative;max-width:520px;margin:0 auto;padding:0 22px 40px}
-.top{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
-.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:1.1rem}
-.brand-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--purple));display:inline-flex;padding:4px}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,.brand{font-family:'Space Grotesk','Inter',system-ui,sans-serif}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid var(--line)}
+nav.top{display:flex;align-items:center;justify-content:space-between;padding:20px 32px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:1.15rem}
+.brand-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--purple));display:inline-flex;padding:4px;flex-shrink:0}
 .brand-mark img{width:100%;height:100%;object-fit:contain}
-.plan-pill{font-size:.78rem;color:var(--ink-dim);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
-.hello{margin-top:8px;text-align:center}
-.hello h1{font-size:1.7rem;font-weight:600;letter-spacing:-.02em}
-.hello p{margin-top:8px;color:var(--ink-dim);font-size:.98rem}
-.stage{position:relative;width:min(300px,78vw);aspect-ratio:1;margin:34px auto 26px}
-.ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
-.ring circle{fill:none;stroke-width:6;stroke-linecap:round}
-.ring .bg{stroke:var(--line)}
-.ring .fg{stroke:url(#rg);stroke-dasharray:754;stroke-dashoffset:754;transition:stroke-dashoffset .2s linear}
-.pulse{position:absolute;inset:14%;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--blue) 28%,transparent),transparent 70%);animation:pulse 2.8s ease-in-out infinite}
-.running .pulse{animation-duration:1s}
-@keyframes pulse{50%{transform:scale(1.12);opacity:.6}}
-.go{position:absolute;inset:11%;border-radius:50%;border:0;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-shadow:0 18px 50px -12px color-mix(in srgb,var(--purple) 70%,transparent);transition:transform .2s;font-family:inherit}
-.go:hover{transform:scale(1.03)}.go:active{transform:scale(.97)}.go:disabled{cursor:default;transform:none}
-.go svg{width:46px;height:46px}
-.go .lbl{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.25rem}
-.go .pct{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:2.4rem}
-.go.done{background:linear-gradient(135deg,#10B981,var(--blue))}
-.status{text-align:center;min-height:48px;color:var(--ink-dim);font-size:.98rem}
-.status strong{display:block;color:var(--ink);font-family:'Space Grotesk',sans-serif;font-size:1.1rem;margin-bottom:4px}
-.modes{display:flex;gap:8px;justify-content:center;margin:6px 0 28px;flex-wrap:wrap}
-.mode{font:inherit;font-size:.9rem;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink-dim);cursor:pointer;transition:all .2s}
-.mode:disabled{opacity:.5;cursor:default}
-.mode.on{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--blue),var(--purple))}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.card{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:16px 14px}
-.card small{display:block;color:var(--ink-dim);font-size:.75rem}
-.card .num{display:block;font-size:1.45rem;font-weight:600;margin:6px 0 10px}
-.bar{height:5px;border-radius:3px;background:var(--line);overflow:hidden}
-.bar i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width 1s ease}
-.result{display:none;margin-top:18px;border:1px solid var(--line);background:var(--card);border-radius:18px;padding:20px}
-.result.show{display:block;animation:in .5s ease}
-@keyframes in{from{opacity:0;transform:translateY(8px)}}
-.result h3{font-size:1.05rem;font-weight:600;margin-bottom:12px}
-.result ul{list-style:none;display:flex;flex-direction:column;gap:10px;font-size:.93rem}
-.result li{display:flex;justify-content:space-between;gap:12px;color:var(--ink-dim)}
-.result li b{color:var(--ok);font-weight:600;white-space:nowrap}
-.foot{margin-top:26px;text-align:center;font-size:.8rem;color:var(--ink-dim)}
-@media (prefers-reduced-motion:reduce){.pulse{animation:none}}
+.nav-links{display:flex;gap:36px;font-size:.95rem;color:var(--ink-dim)}
+.nav-links a{text-decoration:none;transition:color .2s}.nav-links a:hover{color:var(--ink)}
+.nav-cta{padding:10px 20px;border-radius:999px;background:var(--ink);color:var(--bg);font-size:.9rem;font-weight:600;text-decoration:none;white-space:nowrap}
+@media(max-width:760px){.nav-links{display:none}}
+.hero{position:relative;padding:96px 0 120px;overflow:hidden}
+.hero-glow{position:absolute;top:-220px;right:-160px;width:640px;height:640px;background:radial-gradient(circle,color-mix(in srgb,var(--purple) 35%,transparent),transparent 70%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center;position:relative}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:56px}.hero{padding:64px 0 80px}}
+.tagpill{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink-dim);border:1px solid var(--line);padding:7px 14px 7px 10px;border-radius:999px;margin-bottom:28px}
+.tagpill .dot{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple))}
+.hero h1{font-size:clamp(2.4rem,4.6vw,3.6rem);line-height:1.08;letter-spacing:-.02em;font-weight:600;max-width:16ch}
+.lead{margin-top:22px;font-size:1.1rem;line-height:1.6;color:var(--ink-dim);max-width:44ch}
+.store-row{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap}
+.store-btn{display:flex;align-items:center;gap:12px;padding:12px 20px;border-radius:14px;border:1px solid var(--line);background:var(--card);text-decoration:none;transition:border-color .2s,transform .2s}
+.store-btn:hover{border-color:color-mix(in srgb,var(--blue) 50%,var(--line));transform:translateY(-1px)}
+.store-btn svg{width:22px;height:22px;flex-shrink:0}
+.store-text{line-height:1.2}.store-text small{display:block;font-size:.7rem;color:var(--ink-dim)}.store-text strong{font-size:.98rem;font-weight:600}
+.metrics-row{display:flex;gap:36px;margin-top:48px;flex-wrap:wrap}
+.metric strong{display:block;font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:600;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.metric span{font-size:.85rem;color:var(--ink-dim)}
+.art-frame{position:relative;aspect-ratio:1/1;max-width:480px;margin:0 auto;width:100%}
+.art-frame svg{width:100%;height:100%}
+.halo{position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--blue) 16%,transparent),transparent 65%)}
+.path-line{fill:none;stroke:var(--line);stroke-width:1.6;stroke-linecap:round}
+.node{fill:var(--bg-soft);stroke:var(--line);stroke-width:1.4}.node.hot{stroke:var(--blue)}.node.seen{stroke:color-mix(in srgb,var(--blue) 45%,var(--line))}
+#trail{fill:none;stroke:url(#lineGrad);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--line) 20%,var(--line) 80%,transparent)}
+.features,.plans{padding:100px 0}
+.section-head{max-width:640px;margin-bottom:56px}
+.section-head h2{font-size:clamp(1.8rem,3vw,2.4rem);font-weight:600;letter-spacing:-.015em;line-height:1.15}
+.section-head p{margin-top:16px;color:var(--ink-dim);font-size:1.05rem;line-height:1.6;max-width:52ch}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+@media(max-width:820px){.feature-grid{grid-template-columns:1fr}}
+.feature{background:var(--bg);padding:36px 32px}
+.fi{width:38px;height:38px;margin-bottom:22px}
+.feature h3{font-size:1.08rem;font-weight:600;margin-bottom:10px}
+.feature p{font-size:.94rem;color:var(--ink-dim);line-height:1.6}
+.project{padding:110px 0 130px;background:var(--bg-soft);border-block:1px solid var(--line)}
+.project-inner{display:grid;grid-template-columns:.85fr 1.15fr;gap:72px;align-items:start}
+@media(max-width:900px){.project-inner{grid-template-columns:1fr;gap:48px}}
+.project-side h2{font-size:clamp(1.9rem,3.2vw,2.6rem);font-weight:600;line-height:1.14;letter-spacing:-.015em}
+.project-side p{margin-top:18px;color:var(--ink-dim);font-size:1.03rem;line-height:1.65;max-width:42ch}
+.project-mark{display:inline-block;width:44px;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--purple));margin-bottom:26px}
+.project-canvas{border:1px dashed color-mix(in srgb,var(--ink-dim) 55%,transparent);border-radius:18px;padding:44px 40px;background:var(--card);display:flex;flex-direction:column;gap:14px}
+@media(max-width:560px){.project-canvas{padding:28px 22px}}
+.project-canvas .tag{display:inline-flex;width:fit-content;font-size:.78rem;color:var(--ink-dim);border:1px solid var(--line);padding:5px 12px;border-radius:999px}
+.project-canvas h4{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:500;color:var(--ink-dim);line-height:1.6}
+.project-canvas .hint{font-size:.92rem;color:var(--ink-dim);opacity:.8;line-height:1.6}
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:900px){.plan-grid{grid-template-columns:1fr}}
+.plan{position:relative;display:flex;flex-direction:column;padding:36px 32px;border:1px solid var(--line);border-radius:20px;background:var(--card)}
+.plan.featured{background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(135deg,var(--blue),var(--purple)) border-box;border:1.5px solid transparent}
+.plan-badge{position:absolute;top:-12px;left:32px;font-size:.75rem;font-weight:600;color:#fff;padding:5px 12px;border-radius:999px;background:linear-gradient(135deg,var(--blue),var(--purple))}
+.plan h3{font-size:1.15rem;font-weight:600}
+.plan-desc{margin-top:8px;font-size:.92rem;color:var(--ink-dim);line-height:1.5;min-height:2.9em}
+.price{margin:22px 0 26px;display:flex;align-items:baseline;gap:6px}
+.price strong{font-family:'Space Grotesk',sans-serif;font-size:2.6rem;font-weight:600;letter-spacing:-.02em;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.price span{font-size:.9rem;color:var(--ink-dim)}
+.plan ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:32px;flex:1}
+.plan li{display:flex;gap:10px;font-size:.94rem;line-height:1.45}
+.plan li::before{content:"";flex-shrink:0;width:16px;height:16px;margin-top:2px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l3 3 5-6' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l3 3 5-6' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.plan li.inherit{color:var(--ink-dim)}
+.plan-btn{display:block;text-align:center;padding:13px 20px;border-radius:999px;font-weight:600;font-size:.95rem;text-decoration:none;border:1px solid var(--line);transition:transform .2s,border-color .2s}
+.plan-btn:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--blue) 50%,var(--line))}
+.plan.featured .plan-btn{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border-color:transparent}
+.cta-strip{padding:100px 0 110px;text-align:center}
+.cta-strip h2{font-size:clamp(1.9rem,3.4vw,2.6rem);font-weight:600;letter-spacing:-.015em;max-width:20ch;margin:0 auto;line-height:1.2}
+.cta-strip .store-row{justify-content:center;margin-top:36px}
+footer{border-top:1px solid var(--line);padding:36px 0}
+.footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.85rem;color:var(--ink-dim)}
+.footer-row a{text-decoration:none;margin-left:22px}.footer-row a:hover{color:var(--ink)}
 </style>
 </head>
 <body>
-<div class="glow" aria-hidden="true"></div><div class="glow b" aria-hidden="true"></div>
-<div class="app" id="app">
-  <div class="top">
-    <div class="brand"><span class="brand-mark"><img src="data:image/png;base64,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" alt=""></span>Rocket Booster</div>
-    <span class="plan-pill">Plano Avançado</span>
+<header>
+  <nav class="top">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"><img src="data:image/png;base64,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" alt=""></span>Rocket Booster</div>
+    <div class="nav-links"><a href="#app">Aplicativo</a><a href="#planos">Planos</a><a href="#projeto">O projeto</a><a href="#contato">Contato</a></div>
+    <a href="#baixar" class="nav-cta">Baixar app</a>
+  </nav>
+</header>
+<main>
+  <section class="hero" id="app">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <span class="tagpill"><span class="dot" aria-hidden="true"></span>Disponível para iOS, Android, Windows e Mac</span>
+        <h1>Mais agilidade, menos limites.</h1>
+        <p class="lead">O único app que otimiza tanto computadores quanto aparelhos telefônicos.</p>
+        <div class="store-row">
+          <a href="#" class="store-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span class="store-text"><small>Baixar para</small><strong>Windows &amp; Mac</strong></span></a>
+          <a href="#" class="store-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg><span class="store-text"><small>Disponível na</small><strong>App Store &amp; Google Play</strong></span></a>
+        </div>
+        <div class="metrics-row">
+          <div class="metric"><strong>32%</strong><span>menos travamento</span></div>
+          <div class="metric"><strong>4.8</strong><span>nota média nas lojas de app</span></div>
+          <div class="metric"><strong>&lt;2min</strong><span>para a primeira otimização</span></div>
+        </div>
+      </div>
+      <div class="art-frame" aria-hidden="true">
+        <div class="halo"></div>
+        <svg viewBox="0 0 420 420" id="rocketArt">
+          <defs>
+            <linearGradient id="lineGrad" gradientUnits="userSpaceOnUse" x1="60" y1="340" x2="360" y2="90"><stop offset="0" stop-color="#1E90FF"/><stop offset="1" stop-color="#8A2BE2"/></linearGradient>
+            <linearGradient id="rocketGrad" gradientUnits="userSpaceOnUse" x1="-12" y1="0" x2="14" y2="0"><stop offset="0" stop-color="#8A2BE2"/><stop offset="1" stop-color="#1E90FF"/></linearGradient>
+            <linearGradient id="flameGrad" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#1E90FF"/><stop offset="1" stop-color="#8A2BE2" stop-opacity="0"/></linearGradient>
+          </defs>
+          <path class="path-line" d="M60 80 C 150 60, 220 140, 210 210"/>
+          <path class="path-line" d="M60 340 C 130 320, 160 260, 210 210"/>
+          <path class="path-line" d="M360 90 C 300 110, 260 160, 210 210"/>
+          <path class="path-line" d="M370 320 C 300 300, 260 260, 210 210"/>
+          <path class="path-line" d="M330 190 C 280 170, 250 200, 210 210"/>
+          <circle id="n0" class="node" cx="60" cy="80" r="9"/><circle id="n1" class="node" cx="60" cy="340" r="9"/>
+          <circle id="n2" class="node" cx="360" cy="90" r="9"/><circle id="n3" class="node" cx="370" cy="320" r="9"/>
+          <circle id="n4" class="node" cx="330" cy="190" r="7"/><circle id="n5" class="node hot" cx="210" cy="210" r="13"/>
+          <path id="trail" d=""/>
+          <g id="rocket">
+            <path fill="url(#flameGrad)" d="M-9 -3 Q-24 0 -9 3 Z"><animate attributeName="d" dur=".9s" repeatCount="indefinite" values="M-9 -3 Q-24 0 -9 3 Z;M-9 -3.5 Q-30 0 -9 3.5 Z;M-9 -3 Q-22 0 -9 3 Z;M-9 -3 Q-24 0 -9 3 Z"/></path>
+            <path fill="#8A2BE2" d="M-4 -5 L-12 -12 L-9 -4 Z"/><path fill="#8A2BE2" d="M-4 5 L-12 12 L-9 4 Z"/>
+            <path fill="url(#rocketGrad)" d="M15 0 C9 -7 -3 -7 -10 -5 L-10 5 C-3 7 9 7 15 0 Z"/>
+            <circle cx="3" cy="0" r="2.6" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+  <div class="divider"></div>
+  <section class="features">
+    <div class="wrap">
+      <div class="section-head"><h2>Sobre o app</h2><p>Cada aparelho possui diversos arquivos ou aplicativos que estragam a memória do dispositivo, nós limitamos o uso de sua memória neles.</p></div>
+      <div class="feature-grid">
+        <div class="feature"><svg class="fi" viewBox="0 0 38 38" fill="none"><defs><linearGradient id="g1" x1="4" y1="4" x2="34" y2="34"><stop stop-color="#1E90FF"/><stop offset="1" stop-color="#8A2BE2"/></linearGradient></defs><rect x="4" y="4" width="30" height="30" rx="8" stroke="url(#g1)" stroke-width="1.6"/><path d="M12 22l5-6 4 4 5-8" stroke="url(#g1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><h3>Maior desempenho em jogos e aplicativos</h3><p>Nosso app acessa arquivos não utilizados e aplicativos que estão acabando com o desempenho e a velocidade de seu aparelho.</p></div>
+        <div class="feature"><svg class="fi" viewBox="0 0 38 38" fill="none"><defs><linearGradient id="g2" x1="4" y1="4" x2="34" y2="34"><stop stop-color="#1E90FF"/><stop offset="1" stop-color="#8A2BE2"/></linearGradient></defs><circle cx="19" cy="19" r="15" stroke="url(#g2)" stroke-width="1.6"/><path d="M19 11v8l6 4" stroke="url(#g2)" stroke-width="1.6" stroke-linecap="round"/></svg><h3>Seleção de tipos de limpeza</h3><p>Diga o que você deseja otimizar em seu aparelho ou utilize a sugestão de nosso suporte.</p></div>
+        <div class="feature"><svg class="fi" viewBox="0 0 38 38" fill="none"><defs><linearGradient id="g3" x1="4" y1="4" x2="34" y2="34"><stop stop-color="#1E90FF"/><stop offset="1" stop-color="#8A2BE2"/></linearGradient></defs><path d="M6 28l7-14 7 8 5-6 7 12" stroke="url(#g3)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><h3>Histórico que aprende</h3><p>Quanto mais você usa, mais precisas ficam as sugestões.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="plans" id="planos">
+    <div class="wrap">
+      <div class="section-head"><h2>Escolha o plano ideal para o seu aparelho</h2><p>Comece com o essencial e evolua conforme a sua necessidade. Cada plano inclui tudo o que o anterior oferece.</p></div>
+      <div class="plan-grid">
+        <div class="plan"><h3>Leve</h3><p class="plan-desc">Otimização leve para o dia a dia do seu aparelho.</p><div class="price"><strong>R$ 10</strong><span>/mês</span></div><ul><li>Análise rápida do dispositivo</li><li>Limpeza de arquivos temporários e cache</li><li>Liberação básica de memória</li></ul><a href="#baixar" class="plan-btn">Começar com o Leve</a></div>
+        <div class="plan featured"><span class="plan-badge">Mais popular</span><h3>Avançado</h3><p class="plan-desc">Mais desempenho em jogos e aplicativos.</p><div class="price"><strong>R$ 50</strong><span>/mês</span></div><ul><li class="inherit">Tudo do plano Leve</li><li>Otimização para jogos e aplicativos</li><li>Seleção de tipos de limpeza</li><li>Controle de apps que consomem memória</li></ul><a href="#baixar" class="plan-btn">Escolher o Avançado</a></div>
+        <div class="plan"><h3>Completo</h3><p class="plan-desc">Otimização profunda com sugestões inteligentes.</p><div class="price"><strong>R$ 100</strong><span>/mês</span></div><ul><li class="inherit">Tudo do plano Avançado</li><li>Otimização profunda do sistema</li><li>Histórico que aprende e sugere melhorias</li><li>Suporte prioritário</li></ul><a href="#baixar" class="plan-btn">Escolher o Completo</a></div>
+      </div>
+    </div>
+  </section>
+  <section class="project" id="projeto">
+    <div class="wrap project-inner">
+      <div class="project-side"><span class="project-mark" aria-hidden="true"></span><h2>O projeto por trás do Rocket Booster</h2><p>Tudo começou quando o PC de um dos nossos amigos começou a apresentar vários problemas de desempenho. O computador, que antes funcionava normalmente, começou a ficar lento, travar e apresentar quedas de desempenho depois de algumas tentativas de otimização.</p></div>
+      <div class="project-canvas">
+        <span class="tag">Sobre o projeto</span>
+        <h4>Nós percebemos que simplesmente aplicar várias configurações e ajustes sem saber exatamente o que estávamos fazendo poderia acabar piorando a situação. Foi então que surgiu uma ideia: por que não criar uma ferramenta que fizesse essas otimizações de forma mais segura e organizada? A partir disso, começamos a pensar em um aplicativo de otimização para computadores. A proposta seria analisar o sistema, identificar possíveis problemas de desempenho e oferecer ajustes que realmente fizessem sentido para cada PC, evitando alterações desnecessárias ou arriscadas.</h4>
+        <p class="hint">O que começou como uma tentativa de resolver o problema do computador de um amigo acabou se transformando em um projeto muito maior. A ideia era criar uma ferramenta simples, eficiente e fácil de usar, capaz de ajudar outras pessoas a melhorar o desempenho de seus computadores sem precisar conhecer profundamente todas as configurações do sistema.</p>
+      </div>
+    </div>
+  </section>
+  <section class="cta-strip" id="baixar">
+    <div class="wrap">
+      <h2>Sua próxima rota já está calculada.</h2>
+      <div class="store-row">
+        <a href="#" class="store-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg><span class="store-text"><small>Baixar na</small><strong>App Store &amp; Google Play</strong></span></a>
+        <a href="#" class="store-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span class="store-text"><small>Disponível para</small><strong>Windows &amp; Mac</strong></span></a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer id="contato">
+  <div class="wrap footer-row">
+    <span>© 2026 Rocket Booster. Todos os direitos reservados.</span>
+    <nav><a href="#app">Aplicativo</a><a href="#planos">Planos</a><a href="#projeto">Projeto</a><a href="#contato">Contato</a></nav>
   </div>
-  <div class="hello"><h1>Seu aparelho, mais rápido.</h1><p>Escolha o tipo e toque no botão. Nós cuidamos do resto.</p></div>
-
-  <div class="stage">
-    <svg class="ring" viewBox="0 0 270 270" aria-hidden="true"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1E90FF"/><stop offset="1" stop-color="#8A2BE2"/></linearGradient></defs><circle class="bg" cx="135" cy="135" r="120"/><circle class="fg" id="fg" cx="135" cy="135" r="120"/></svg>
-    <div class="pulse" aria-hidden="true"></div>
-    <button class="go" id="go" type="button">
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 6c8 5 11 13 9 24l-5 4h-8l-5-4C13 19 16 11 24 6Z"/><circle cx="24" cy="19" r="3.4"/><path d="M19 34l-4 8 7-4M29 34l4 8-7-4"/></svg>
-      <span class="lbl" id="lbl">Otimizar</span>
-    </button>
-  </div>
-
-  <div class="status" id="status" aria-live="polite"><strong>Pronto para otimizar</strong>Leva menos de 2 minutos.</div>
-
-  <div class="modes" id="modes">
-    <button class="mode on" data-m="leve" type="button">Leve</button>
-    <button class="mode" data-m="jogos" type="button">Jogos</button>
-    <button class="mode" data-m="profunda" type="button">Profunda</button>
-  </div>
-
-  <div class="cards">
-    <div class="card"><small>Memória em uso</small><span class="num" id="v0">78%</span><div class="bar"><i id="b0"></i></div></div>
-    <div class="card"><small>Armazenamento</small><span class="num" id="v1">64%</span><div class="bar"><i id="b1"></i></div></div>
-    <div class="card"><small>Desempenho</small><span class="num" id="v2">62</span><div class="bar"><i id="b2"></i></div></div>
-  </div>
-
-  <div class="result" id="result">
-    <h3 id="rt">Tudo pronto!</h3>
-    <ul id="rl"></ul>
-  </div>
-  <p class="foot">Demonstração da interface do Rocket Booster.</p>
-</div>
+</footer>
 <script>
 (function(){
-const $=id=>document.getElementById(id);
-const M={
-  leve:{ms:5000,mb:[300,700],steps:['Analisando o aparelho…','Limpando arquivos temporários…','Liberando memória…'],extra:['Cache limpo','Memória liberada']},
-  jogos:{ms:7000,mb:[500,1100],steps:['Analisando jogos e apps…','Fechando processos pesados…','Ajustando desempenho…','Liberando memória…'],extra:['Apps pesados pausados','Desempenho em jogos ajustado']},
-  profunda:{ms:9000,mb:[1200,2400],steps:['Analisando o sistema…','Procurando arquivos não utilizados…','Limpando cache e temporários…','Otimizando memória…','Finalizando…'],extra:['Arquivos não usados removidos','Sistema otimizado em profundidade']}
-};
-let mode='leve',busy=false,s={ram:78,sto:64,perf:62};
-const C=754;
-function meters(){
-  $('v0').textContent=Math.round(s.ram)+'%';$('b0').style.width=s.ram+'%';
-  $('v1').textContent=Math.round(s.sto)+'%';$('b1').style.width=s.sto+'%';
-  $('v2').textContent=Math.round(s.perf);$('b2').style.width=s.perf+'%';
-}
-setTimeout(meters,150);
-document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{
-  if(busy)return;mode=b.dataset.m;
-  document.querySelectorAll('.mode').forEach(x=>x.classList.toggle('on',x===b));
-});
-function fmt(mb){return mb>=1000?(mb/1000).toFixed(1).replace('.',',')+' GB':Math.round(mb)+' MB'}
-$('go').onclick=function(){
-  if(busy)return;
-  busy=true;const cfg=M[mode],go=this;
-  go.disabled=true;go.classList.remove('done');
-  document.querySelectorAll('.mode').forEach(x=>x.disabled=true);
-  $('result').classList.remove('show');
-  $('app').classList.add('running');
-  const before={...s};
-  const start=performance.now();
-  (function tick(now){
-    const t=Math.min(1,(now-start)/cfg.ms);
-    $('fg').style.strokeDashoffset=C*(1-t);
-    go.innerHTML='<span class="lbl" style="font-size:2.4rem">'+Math.round(t*100)+'%</span>';
-    const i=Math.min(cfg.steps.length-1,Math.floor(t*cfg.steps.length));
-    $('status').innerHTML='<strong>Otimizando…</strong>'+cfg.steps[i];
-    if(t<1){requestAnimationFrame(tick);return}
-    finish(before,cfg,go);
-  })(start);
-};
-function finish(before,cfg,go){
-  const freed=cfg.mb[0]+Math.random()*(cfg.mb[1]-cfg.mb[0]);
-  s.ram=Math.max(32,before.ram-(mode==='leve'?14:mode==='jogos'?24:30));
-  s.sto=Math.max(40,before.sto-(mode==='profunda'?9:mode==='jogos'?4:3));
-  s.perf=Math.min(97,before.perf+(mode==='leve'?14:mode==='jogos'?22:28));
-  meters();
-  go.innerHTML='<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 25l8 8 16-18"/></svg><span class="lbl">Otimizar de novo</span>';
-  go.classList.add('done');go.disabled=false;
-  $('app').classList.remove('running');
-  $('status').innerHTML='<strong>Aparelho otimizado!</strong>Você liberou '+fmt(freed)+'.';
-  $('rt').textContent='O que foi feito';
-  $('rl').innerHTML='<li><span>Espaço liberado</span><b>'+fmt(freed)+'</b></li><li><span>Memória em uso</span><b>'+Math.round(before.ram)+'% → '+Math.round(s.ram)+'%</b></li><li><span>Desempenho</span><b>'+Math.round(before.perf)+' → '+Math.round(s.perf)+'</b></li>'+cfg.extra.map(e=>'<li><span>'+e+'</span><b>✓</b></li>').join('');
-  $('result').classList.add('show');
-  document.querySelectorAll('.mode').forEach(x=>x.disabled=false);
-  busy=false;
-  $('fg').style.strokeDashoffset=C;
-}
+const INTERVAL=3500,TRAVEL=2000,PTS=[{x:60,y:80},{x:60,y:340},{x:360,y:90},{x:370,y:320},{x:330,y:190},{x:210,y:210}],C={x:210,y:210};
+const svg=document.getElementById('rocketArt'),rocket=document.getElementById('rocket'),trail=document.getElementById('trail'),nodes=PTS.map((_,i)=>document.getElementById('n'+i));
+const probe=document.createElementNS('http://www.w3.org/2000/svg','path');probe.setAttribute('fill','none');probe.setAttribute('stroke','none');svg.appendChild(probe);
+let cur=5,visited=new Set([cur]),move=null,trailPts=[],arrivedAt=0,angle=-45,nextAt=performance.now()+1500;
+const ease=t=>-(Math.cos(Math.PI*t)-1)/2;
+const setRocket=(x,y)=>rocket.setAttribute('transform','translate('+x+' '+y+') rotate('+angle+')');
+setRocket(C.x,C.y);
+function buildRoute(f,t){const a=PTS[f],b=PTS[t],mx=(a.x+b.x)/2,my=(a.y+b.y)/2,dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy)||1;let nx=-dy/len,ny=dx/len;if((mx-C.x)*nx+(my-C.y)*ny<0){nx=-nx;ny=-ny}const bow=len*.3;probe.setAttribute('d','M'+a.x+' '+a.y+' Q'+(mx+nx*bow)+' '+(my+ny*bow)+' '+b.x+' '+b.y);return{total:probe.getTotalLength()}}
+function pickTarget(){let free=PTS.map((_,i)=>i).filter(i=>!visited.has(i));if(!free.length){visited=new Set([cur]);nodes.forEach(n=>n.classList.remove('seen'));free=PTS.map((_,i)=>i).filter(i=>i!==cur)}return free[Math.floor(Math.random()*free.length)]}
+function frame(now){
+if(!move&&now>=nextAt){const to=pickTarget();visited.add(to);move={to,route:buildRoute(cur,to),start:now};trailPts=[];nextAt=now+INTERVAL}
+if(move){const total=move.route.total,t=Math.min(1,(now-move.start)/TRAVEL),l=ease(t)*total,p=probe.getPointAtLength(l),q=l+2<=total?probe.getPointAtLength(l+2):null,r=q||probe.getPointAtLength(Math.max(0,l-2));
+const target=Math.atan2(q?q.y-p.y:p.y-r.y,q?q.x-p.x:p.x-r.x)*180/Math.PI;angle+=(((target-angle+540)%360)-180)*.15;
+setRocket(p.x,p.y);trailPts.push(p.x.toFixed(1)+' '+p.y.toFixed(1));trail.setAttribute('d','M'+trailPts.join(' L'));trail.style.opacity=1;
+if(t===1){nodes[cur].classList.remove('hot');nodes[cur].classList.add('seen');cur=move.to;nodes[cur].classList.add('hot');arrivedAt=now;move=null}}
+else if(arrivedAt){trail.style.opacity=Math.max(0,1-(now-arrivedAt)/1200)}
+requestAnimationFrame(frame)}
+if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){svg.pauseAnimations()}else{requestAnimationFrame(frame)}
 })();
 </script>
 </body>
